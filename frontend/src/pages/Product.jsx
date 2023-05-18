@@ -2,57 +2,106 @@ import React from "react";
 
 import CrudModule from "@/modules/CrudModule";
 import ProductForm from "@/forms/ProductForm";
+import moment from "moment";
+import { useState } from "react";
+import { crud } from "@/redux/crud/actions";
+import { useDispatch } from "react-redux";
 
 function Product() {
-  const entity = "product";
+  const entity = "users";
   const searchConfig = {
     displayLabels: ["productName"],
     searchFields: "productName",
     outputValue: "_id",
   };
 
-  const panelTitle = "Product Panel";
-  const dataTableTitle = "Products Lists";
+  const [filters,setFilters] = useState("ACTIVE,REGISTERED");
+  const dispatch = useDispatch();
+
+  const panelTitle = "User Panel";
+  const dataTableTitle = "Users List";
   const entityDisplayLabels = ["productName"];
 
   const readColumns = [
     {
-      title: "Product Name",
-      dataIndex: "productName",
+      title: "FirstName",
+      dataIndex: "firstName",
     },
     {
-      title: "Description",
-      dataIndex: "description",
+      title: "LastName",
+      dataIndex: "lastName",
     },
     {
-      title: "Price",
-      dataIndex: "price",
+      title: "Email",
+      dataIndex: "email",
+    }, {
+      title: "CreatedAt",
+      dataIndex: "createdAt",
     },
+    {
+      title: "UpdatedAt",
+      dataIndex: "updatedAt",
+    },
+    {
+      title: "UserStatus",
+      dataIndex: "userStatus",
+    }
   ];
   const dataTableColumns = [
     {
-      title: "Product Name",
-      dataIndex: "productName",
+      title: "FirstName",
+      dataIndex: "firstName",
     },
     {
-      title: "Description",
-      dataIndex: "description",
+      title: "LastName",
+      dataIndex: "lastName",
     },
     {
-      title: "Price",
-      dataIndex: "price",
+      title: "Email",
+      dataIndex: "email",
+    }, {
+      title: "CreatedAt",
+      dataIndex: "createdAt",
+      render: (data) => {
+        return (
+          <>{data?moment(data).format("YYYY-MM-DD"):"N/A"}</>
+        )
+      }
     },
     {
-      title: "status",
-      dataIndex: "status",
+      title: "UpdatedAt",
+      dataIndex: "updatedAt",
+      sorter: true,
+      render: (data) => {
+        return (
+          <>{data?moment(data).format("YYYY-MM-DD"):"N/A"}</>
+        )
+      }
     },
+    {
+      title: "UserStatus",
+      dataIndex: "userStatus",
+      defaultFilteredValue :['ACTIVE','REGISTERED'],
+      filters: [
+        {
+          text: 'Active',
+          value: 'ACTIVE',
+        },
+        {
+          text: 'Registered',
+          value: 'REGISTERED',
+        },
+    
+      ],
+      width: '40%',
+    }
   ];
 
-  const ADD_NEW_ENTITY = "Add new product";
-  const DATATABLE_TITLE = "products List";
-  const ENTITY_NAME = "product";
-  const CREATE_ENTITY = "Create product";
-  const UPDATE_ENTITY = "Update product";
+  const ADD_NEW_ENTITY = "Add new user";
+  const DATATABLE_TITLE = "users List";
+  const ENTITY_NAME = "users";
+  const CREATE_ENTITY = "Create user";
+  const UPDATE_ENTITY = "Update user";
   const config = {
     entity,
     panelTitle,
@@ -66,6 +115,7 @@ function Product() {
     dataTableColumns,
     searchConfig,
     entityDisplayLabels,
+    filters,
   };
   return (
     <CrudModule

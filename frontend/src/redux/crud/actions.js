@@ -27,37 +27,49 @@ export const crud = {
       payload: { ...data },
     });
   },
-  list: (entity, currentPage = 1) => async (dispatch) => {
-    dispatch({
-      type: actionTypes.REQUEST_LOADING,
-      keyState: "list",
-      payload: null,
-    });
-
-    let data = await request.list(entity, { page: currentPage });
-
-    if (data.success === true) {
-      const result = {
-        items: data.result,
-        pagination: {
-          current: parseInt(data.pagination.page, 10),
-          pageSize: 10,
-          total: parseInt(data.pagination.count, 10),
-        },
-      };
+  list:
+    (entity, page, filters, searchString, sortingObj) => async (dispatch) => {
       dispatch({
-        type: actionTypes.REQUEST_SUCCESS,
-        keyState: "list",
-        payload: result,
-      });
-    } else {
-      dispatch({
-        type: actionTypes.REQUEST_FAILED,
+        type: actionTypes.REQUEST_LOADING,
         keyState: "list",
         payload: null,
       });
-    }
-  },
+
+      // console.log(entity, page, filters = "REGISTERED", searchString,"sortingObj>>>>>>")
+
+      filters = filters && filters.length ? filters : null;
+      searchString = searchString && searchString.length ? searchString : null;
+      sortingObj = sortingObj ? sortingObj : null;
+
+      let data = await request.list(entity, {
+        page: page,
+        limit: 20,
+        filters,
+        searchString,
+        sortingObj,
+      });
+      if (data.success === true) {
+        const result = {
+          items: data.data,
+          pagination: {
+            current: page,
+            pageSize: 20,
+            total: data.totalCount,
+          },
+        };
+        dispatch({
+          type: actionTypes.REQUEST_SUCCESS,
+          keyState: "list",
+          payload: result,
+        });
+      } else {
+        dispatch({
+          type: actionTypes.REQUEST_FAILED,
+          keyState: "list",
+          payload: null,
+        });
+      }
+    },
   create: (entity, jsonData) => async (dispatch) => {
     dispatch({
       type: actionTypes.REQUEST_LOADING,
@@ -82,6 +94,28 @@ export const crud = {
       dispatch({
         type: actionTypes.REQUEST_FAILED,
         keyState: "create",
+        payload: null,
+      });
+    }
+  },
+  getTags: (entity) => async (dispatch) => {
+    console.log(entity, "eneyeyeyy>>>>>");
+    dispatch({
+      type: actionTypes.TAGS_REQUEST_LOADING,
+      keyState: "list",
+      payload: null,
+    });
+    let data = await request.getTags(entity);
+
+    console.log(data, ">>>>>");
+    if (data.success === true) {
+      dispatch({
+        type: actionTypes.TAGS_GET_SUCCESS,
+        payload: data.data,
+      });
+    } else {
+      dispatch({
+        type: actionTypes.TAGS_GET_FAILURE,
         payload: null,
       });
     }
@@ -190,5 +224,35 @@ export const crud = {
         payload: null,
       });
     }
+  },
+  setSearch: (searchString) => async (dispatch) => {
+    dispatch({
+      type: actionTypes.SET_SERACH_STRING,
+      keyState: "search",
+      payload: searchString,
+    });
+  },
+
+  createPost: (payload) => async (dispatch) => {
+     await request.post("post", payload);
+    // if (data.success) {
+    //   dispatch(crud.toggleCreateModal(false));
+    // }
+  },
+  setFilter: (filterString) => async (dispatch) => {
+    dispatch({
+      type: actionTypes.SET_FILTER_STRING,
+      keyState: "filter",
+      payload: filterString,
+    });
+  },
+  toggleCreateModal: (status) => async (dispatch) => {
+    dispatch({
+      type: status
+        ? actionTypes.SET_CREATE_MODAL_OPEN
+        : actionTypes.SET_CREATE_MODAL_CLOSE,
+      keyState: "filter",
+      payload: status,
+    });
   },
 };

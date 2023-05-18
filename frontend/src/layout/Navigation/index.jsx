@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+import { Drawer, Button } from "antd";
 
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Layout, Menu } from "antd";
 import {
   SettingOutlined,
@@ -11,16 +12,23 @@ import {
   DashboardOutlined,
   TeamOutlined,
 } from "@ant-design/icons";
+import { useEffect } from "react";
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
 
 function Navigation() {
   const [collapsed, setCollapsed] = useState(false);
+  let key = window.location.href.split("/")[3];
+  
+  const location = useLocation();
+
+  const [defaultKey, setDefault] = useState(["1"]);
 
   const onCollapse = () => {
     setCollapsed(!collapsed);
   };
+
   return (
     <>
       <Sider
@@ -32,33 +40,22 @@ function Navigation() {
         }}
       >
         <div className="logo" />
-        <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
-          <Menu.Item key="1" icon={<DashboardOutlined />}>
+        <Menu theme="dark" mode="inline" defaultSelectedKeys={['/']}
+            selectedKeys={[location.pathname]}>
+          <Menu.Item key="/" icon={<DashboardOutlined />}>
             <Link to="/" />
             Home Page
           </Menu.Item>
-          <Menu.Item key="2" icon={<CustomerServiceOutlined />}>
-            <Link to="/customer">Customer</Link>
+          <Menu.Item key="/tags" icon={<FileTextOutlined />}>
+            <Link to="/tags">Tags</Link>
           </Menu.Item>
-          <Menu.Item key="24" icon={<UserOutlined />}>
-            <Link to="/selectcustomer">Custom Select Customer</Link>
+          <Menu.Item key="/posts" icon={<FileTextOutlined />}>
+            <Link to="/posts" />
+            Posts
           </Menu.Item>
-          <Menu.Item key="21" icon={<FileTextOutlined />}>
-            <Link to="/lead" />
-            Lead
-          </Menu.Item>
-          <Menu.Item key="3" icon={<FileSyncOutlined />}>
-            <Link to="/product" />
-            Product
-          </Menu.Item>
-          <Menu.Item key="31" icon={<TeamOutlined />}>
-            <Link to="/admin" />
-            Admins Management
-          </Menu.Item>
-
-          <Menu.Item key="32" icon={<SettingOutlined />}>
-            <Link to="/settings" />
-            Settings
+          <Menu.Item key="/users" icon={<UserOutlined />}>
+            <Link to="/users" />
+            Users
           </Menu.Item>
         </Menu>
       </Sider>

@@ -28,6 +28,10 @@ const INITIAL_STATE = {
   delete: INITIAL_KEY_STATE,
   read: INITIAL_KEY_STATE,
   search: { ...INITIAL_KEY_STATE, result: [] },
+  searchString: "",
+  createModalStatus: null,
+  tagsDataStatus: null,
+  tagsData: null,
 };
 
 const crudReducer = (state = INITIAL_STATE, action) => {
@@ -83,6 +87,43 @@ const crudReducer = (state = INITIAL_STATE, action) => {
         [keyState]: {
           ...INITIAL_STATE[keyState],
         },
+      };
+    case actionTypes.SET_SERACH_STRING:
+      return {
+        ...state,
+        searchString: action.payload,
+      };
+    case actionTypes.SET_FILTER_STRING:
+      return {
+        ...state,
+        filterString: action.payload,
+      };
+    case actionTypes.SET_CREATE_MODAL_OPEN:
+      return {
+        ...state,
+        createModalStatus: true,
+      };
+    case actionTypes.SET_CREATE_MODAL_CLOSE:
+      return {
+        ...state,
+        createModalStatus: false,
+      };
+    case actionTypes.TAGS_GET_SUCCESS:
+      return {
+        ...state,
+        tagsDataStatus: true,
+        tagsData: action.payload,
+      };
+    case actionTypes.TAGS_REQUEST_LOADING:
+      return {
+        ...state,
+        tagsDataStatus: null,
+      };
+    case actionTypes.TAGS_GET_FAILURE:
+      return {
+        ...state,
+        tagsDataStatus: false,
+        tagsData: action.payload,
       };
     default:
       return state;

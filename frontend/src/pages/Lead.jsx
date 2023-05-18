@@ -1,76 +1,75 @@
 import React from "react";
 
 import CrudModule from "@/modules/CrudModule";
-import LeadForm from "@/forms/LeadForm";
+import PostForm from "@/forms/PostForm";
+import { useEffect } from "react";
+import { crud } from "@/redux/crud/actions";
+import { useDispatch } from "react-redux";
 
 function Lead() {
-  const entity = "lead";
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(crud.getTags("tags"))
+  },[])
+  const entity = "posts";
   const searchConfig = {
     displayLabels: ["client"],
     searchFields: "client,email,phone",
     outputValue: "_id",
   };
 
-  const panelTitle = "Lead Panel";
-  const dataTableTitle = "Leads Lists";
-  const entityDisplayLabels = ["client"];
+  const panelTitle = "Post Panel";
+  const dataTableTitle = "Posts List";
+  const entityDisplayLabels = ["Post"];
 
   const readColumns = [
     {
-      title: "Date",
+      title: "MainHeading",
       dataIndex: "date",
     },
     {
-      title: "Client",
+      title: "Tags",
       dataIndex: "client",
     },
     {
-      title: "phone",
-      dataIndex: "phone",
+      title: "CreatedAt",
+      dataIndex: "createdAt",
     },
     {
-      title: "email",
-      dataIndex: "email",
+      title: "UpdatedAt",
+      dataIndex: "updatedAt",
     },
 
     {
       title: "Budget",
       dataIndex: "budget",
-    },
-    {
-      title: "Status",
-      dataIndex: "status",
-    },
-    {
-      title: "Request",
-      dataIndex: "request",
     },
   ];
   const dataTableColumns = [
     {
-      title: "Date",
+      title: "MainHeading",
       dataIndex: "date",
     },
     {
-      title: "Client",
+      title: "Tags",
       dataIndex: "client",
     },
     {
-      title: "phone",
-      dataIndex: "phone",
+      title: "CreatedAt",
+      dataIndex: "createdAt",
     },
-
     {
-      title: "Budget",
-      dataIndex: "budget",
+      title: "UpdatedAt",
+      dataIndex: "updatedAt",
     },
   ];
 
-  const ADD_NEW_ENTITY = "Add new lead";
-  const DATATABLE_TITLE = "leads List";
+  const ADD_NEW_ENTITY = "Add new Post";
+  const DATATABLE_TITLE = "Posts List";
   const ENTITY_NAME = "lead";
-  const CREATE_ENTITY = "Create lead";
-  const UPDATE_ENTITY = "Update lead";
+  const CREATE_ENTITY = "Create Post";
+  const UPDATE_ENTITY = "Update Post";
   const config = {
     entity,
     panelTitle,
@@ -87,8 +86,8 @@ function Lead() {
   };
   return (
     <CrudModule
-      createForm={<LeadForm />}
-      updateForm={<LeadForm isUpdateForm={true} />}
+      createForm={<PostForm />}
+      updateForm={<PostForm isUpdateForm={true} />}
       config={config}
     />
   );

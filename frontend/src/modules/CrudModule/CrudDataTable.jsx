@@ -8,13 +8,17 @@ import { selectItemById } from "@/redux/crud/selectors";
 import { useCrudContext } from "@/context/crud";
 import uniqueId from "@/utils/uinqueId";
 import DataTable from "@/components/DataTable";
+import { useHistory } from "react-router-dom";
 
 function AddNewItem({ config }) {
   const { crudContextAction } = useCrudContext();
+  const history = useHistory();
+  const dispatch = useDispatch();
   const { collapsedBox, panel } = crudContextAction;
   const { ADD_NEW_ENTITY } = config;
   const handelClick = () => {
-    panel.open();
+    // dispatch(crud.toggleCreateModal(true));
+    history.push("/posts/create")
     collapsedBox.close();
   };
 

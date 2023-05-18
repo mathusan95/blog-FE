@@ -3,11 +3,12 @@ console.log(
   process.env.REACT_APP_DEV_REMOTE
 )
 
-export const API_BASE_URL =
-  process.env.NODE_ENV == "production" ||
-  process.env.REACT_APP_DEV_REMOTE == "remote"
-    ? "https://starter-mern.herokuapp.com/api/"
-    : "http://localhost:8888/api/"
+export const API_BASE_URL ="http://localhost:8888/api/"
+export const API_BASE_URL2 = "https://7fp45p0wyg.execute-api.us-east-2.amazonaws.com/dev"
+  // process.env.NODE_ENV == "production" ||
+  // process.env.REACT_APP_DEV_REMOTE == "remote"
+  //   ? "https://starter-mern.herokuapp.com/api/"
+  //   : "http://localhost:8888/api/"
 
 // export const API_BASE_URL = "https://starter-mern.herokuapp.com/api/";
 export const ACCESS_TOKEN_NAME = "x-auth-token"

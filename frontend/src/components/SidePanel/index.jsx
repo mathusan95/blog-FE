@@ -44,6 +44,7 @@ export default function SidePanel({
 
   return (
     <Sider
+    
       trigger={<MenuOutlined className="trigger" />}
       width={400}
       collapsible
@@ -61,14 +62,14 @@ export default function SidePanel({
       }}
     >
       {fixHeaderPanel}
-      <CollapseBox
+      {/* <CollapseBox
         buttonTitle={ADD_NEW_ENTITY}
         isPanelCollapsed={isPanelCollapsed}
         isCollapsed={isBoxCollapsed}
         onCollapse={collapsePanelBox}
         topContent={topContent}
         bottomContent={bottomContent}
-      ></CollapseBox>
+      ></CollapseBox> */}
     </Sider>
   );
 }

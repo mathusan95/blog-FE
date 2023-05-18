@@ -25,12 +25,20 @@ const Product = lazy(() =>
   import(/*webpackChunkName:'ProductPage'*/ "@/pages/Product")
 );
 
+const Tag = lazy(() =>
+  import(/*webpackChunkName:'ProductPage'*/ "@/pages/Tag")
+);
+
 const Logout = lazy(() =>
   import(/*webpackChunkName:'LogoutPage'*/ "@/pages/Logout")
 );
 const NotFound = lazy(() =>
   import(/*webpackChunkName:'NotFoundPage'*/ "@/pages/NotFound")
 );
+const PostCreation = lazy(() =>
+  import(/*webpackChunkName:'NotFoundPage'*/ "@/pages/createPost")
+);
+
 
 export default function AppRouter() {
   const location = useLocation();
@@ -45,10 +53,12 @@ export default function AppRouter() {
             path="/selectcustomer"
             exact
           />
-          <PrivateRoute component={Lead} path="/lead" exact />
-          <PrivateRoute component={Product} path="/product" exact />
+          <PrivateRoute component={Lead} path="/posts" exact />
+          <PrivateRoute component={PostCreation} path="/posts/create" exact />
+          <PrivateRoute component={Lead} path="/posts/:id" exact />
+          <PrivateRoute component={Product} path="/users" exact />
           <PrivateRoute component={Admin} path="/admin" exact />
-
+          <PrivateRoute component={Tag} path="/tags" exact />
           <PrivateRoute component={Logout} path="/logout" exact />
           <PublicRoute path="/login" render={() => <Redirect to="/" />} />
           <Route

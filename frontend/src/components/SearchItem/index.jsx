@@ -7,87 +7,58 @@ import { crud } from "@/redux/crud/actions";
 import { request } from "@/request";
 import { useCrudContext } from "@/context/crud";
 import { selectSearchedItems } from "@/redux/crud/selectors";
+import useDebounce from "@/hooks/useDebounce.js"
 
 import { Empty } from "antd";
 
-export default function SearchItem({ config }) {
-  let { entity, searchConfig } = config;
+export default function SearchItem({ config, handleSearch }) {
+  let { searchConfig } = config;
 
-  const { displayLabels, searchFields, outputValue = "_id" } = searchConfig;
   const dispatch = useDispatch();
-  const [value, setValue] = useState("");
-  const [options, setOptions] = useState([]);
 
-  const { crudContextAction } = useCrudContext();
-  const { panel, collapsedBox, readBox } = crudContextAction;
+  const { displayLabels, outputValue = "_id" } = searchConfig;
 
-  let source = request.source();
+
+  const [searchTerm, setSearchTerm] = useState("");
+
   const { result, isLoading, isSuccess } = useSelector(selectSearchedItems);
+  const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
-  const isTyping = useRef(false);
+  console.log(debouncedSearchTerm, "debouncedSearchTerm>>>>")
 
-  let delayTimer = null;
-  useEffect(() => {
-    isLoading && setOptions([{ label: "... Searching" }]);
-  }, [isLoading]);
-  const onSearch = (searchText) => {
-    isTyping.current = true;
+  // const isTyping = useRef(false);
 
-    clearTimeout(delayTimer);
-    delayTimer = setTimeout(function () {
-      if (isTyping.current && searchText !== "") {
-        dispatch(
-          crud.search(entity, source, {
-            question: searchText,
-            fields: searchFields,
-          })
-        );
-      }
-      isTyping.current = false;
-    }, 500);
-  };
+  // useEffect(() => {
+  //   isLoading && setOptions([{ label: "... Searching" }]);
+  // }, [isLoading]);
 
-  const onSelect = (data) => {
-    const currentItem = result.find((item) => {
-      return item[outputValue] === data;
-    });
 
-    dispatch(crud.currentItem(currentItem));
-    panel.open();
-    collapsedBox.open();
-    readBox.open();
-  };
+  useEffect(
+
+    () => {
+
+      dispatch(crud.setSearch(debouncedSearchTerm))
+
+    },
+    [debouncedSearchTerm]
+  );
 
   const onChange = (data) => {
-    const currentItem = options.find((item) => {
-      return item.value === data;
-    });
-    const currentValue = currentItem ? currentItem.label : data;
-    setValue(currentValue);
+    setSearchTerm(data);
   };
 
-  useEffect(() => {
-    let optionResults = [];
-
-    result.map((item) => {
-      const labels = displayLabels.map((x) => item[x]).join(" ");
-      optionResults.push({ label: labels, value: item[outputValue] });
-    });
-
-    setOptions(optionResults);
-  }, [result]);
 
   return (
     <AutoComplete
-      value={value}
-      options={options}
+      // value={value}
+      // options={options}
       style={{
         width: "100%",
       }}
-      onSelect={onSelect}
-      onSearch={onSearch}
+      // onSelect={onSelect}
+      // onSearch={onSearch}
       onChange={onChange}
-      notFoundContent={!isSuccess ? <Empty /> : ""}
+      // notFoundContent={!isSuccess ? <Empty /> : ""}
       allowClear={true}
       placeholder="Your Search here"
     >

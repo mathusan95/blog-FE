@@ -12,17 +12,29 @@ const NotFound = lazy(() =>
   import(/*webpackChunkName:'NotFoundPage'*/ "@/pages/NotFound")
 );
 
+
+const Search = lazy(() =>
+  import(/*webpackChunkName:'NotFoundPage'*/ "@/pages/Search")
+);
+
+
 export default function AuthRouter() {
   const location = useLocation();
   return (
     <Suspense fallback={<PageLoader />}>
       <AnimatePresence exitBeforeEnter initial={false}>
         <Switch location={location} key={location.pathname}>
+        <PublicRoute
+            path="/search"
+            exact
+            component={Search}
+          />
           <PublicRoute
             path="/"
             component={Login}
             render={() => <Redirect to="/login" />}
           />
+         
           <PublicRoute component={Login} path="/login" exact />
           <Route
             path="*"

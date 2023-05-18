@@ -3,7 +3,7 @@ import { notification } from "antd";
 import codeMessage from "./codeMessage";
 
 const successHandler = (response, typeNotification = {}) => {
-  if (!response.data.result) {
+  if (!response.data) {
     response = {
       ...response,
       status: 404,
@@ -30,16 +30,16 @@ const successHandler = (response, typeNotification = {}) => {
     const message = data && data.message;
     const successText = message || codeMessage[response.status];
     const { status } = response;
-    // notification.config({
-    //   duration: 20,
-    // });
-    // notification.success({
-    //   message: `Request success`,
-    //   description: successText,
-    // });
+    notification.config({
+      duration: 20,
+    });
+    notification.success({
+      message: `Request success`,
+      description: successText,
+    });
   }
 
-  return data;
+  return {...data,success:true};
 };
 
 export default successHandler;

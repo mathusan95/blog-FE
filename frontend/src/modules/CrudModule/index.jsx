@@ -15,6 +15,8 @@ import { useCrudContext } from "@/context/crud";
 import { CrudLayout } from "@/layout";
 
 import CrudDataTable from "./CrudDataTable";
+import { useState } from "react";
+import { useEffect } from "react";
 
 function SidePanelTopContent({ config, formElements }) {
   return (
@@ -25,13 +27,22 @@ function SidePanelTopContent({ config, formElements }) {
   );
 }
 
-function FixHeaderPanel({ config }) {
+function FixHeaderPanel({ config, handleSearchName }) {
   const { crudContextAction } = useCrudContext();
   const { collapsedBox } = crudContextAction;
+
+
+  //  useEffect(()=>{
+  // console.log(config,"cofigigiggigi>>>>")
+  //  },[config])
 
   const addNewItem = () => {
     collapsedBox.close();
   };
+
+  const handleSearch = (val) => {
+    handleSearchName(val)
+  }
   return (
     <div className="box">
       <Row gutter={12}>
@@ -43,7 +54,7 @@ function FixHeaderPanel({ config }) {
       </Row>
       <Row gutter={8}>
         <Col className="gutter-row" span={21}>
-          <SearchItem config={config} />
+          <SearchItem config={config} handleSearch={handleSearch} />
         </Col>
         <Col className="gutter-row" span={3}>
           <Button
@@ -59,23 +70,30 @@ function FixHeaderPanel({ config }) {
 
 export default function CrudModule({ config, createForm, updateForm }) {
   const dispatch = useDispatch();
-
+  const [intialConfig, setconfigs] = useState(config);
   useLayoutEffect(() => {
     dispatch(crud.resetState());
   }, []);
 
+  const handleSearch = (val) => {
+    let configObj = intialConfig;
+    configObj = { ...config, searchString: val }
+    setconfigs(configObj)
+
+  }
+
   return (
     <CrudLayout
       config={config}
-      fixHeaderPanel={<FixHeaderPanel config={config} />}
-      sidePanelBottomContent={
-        <CreateForm config={config} formElements={createForm} />
-      }
-      sidePanelTopContent={
-        <SidePanelTopContent config={config} formElements={updateForm} />
-      }
+      // fixHeaderPanel={<FixHeaderPanel config={config} handleSearchName={handleSearch} />}
+      // sidePanelBottomContent={
+      //   <CreateForm config={config} formElements={createForm} />
+      // }
+      // sidePanelTopContent={
+      //   <SidePanelTopContent config={config} formElements={updateForm} />
+      // }
     >
-      <CrudDataTable config={config} />
+      <CrudDataTable config={intialConfig} />
       <DeleteModal config={config} />
     </CrudLayout>
   );
