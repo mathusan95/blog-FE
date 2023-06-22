@@ -32,6 +32,18 @@ const request = {
       return errorHandler(error);
     }
   },
+
+  createTagsData: async (entity, jsonData) => {
+    // axiosInstance.defaults.headers = {
+    //   ...headersInstance,
+    // };
+    try {
+      const response = await axiosInstance.post(entity, jsonData);
+      return successHandler(response);
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
   read: async (entity, id) => {
     axiosInstance.defaults.headers = {
       ...headersInstance,
@@ -162,7 +174,8 @@ const request = {
       const response = await axiosInstance.get(entityUrl);
       return successHandler(response);
     } catch (error) {
-      return errorHandler(error);s
+      return errorHandler(error);
+      s;
     }
   },
   patch: async (entityUrl, jsonData) => {

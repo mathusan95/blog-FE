@@ -92,6 +92,9 @@ export default function DataTable({ config, DropDownRowMenu, AddNewItem }) {
 
   const { pagination, items } = listResult;
 
+  const [dataval,setDataVal] = useState([])
+  const [paginationVal,setPaginationVal] = useState({})
+
   const dispatch = useDispatch();
 
   const handelDataTableLoad = useCallback((pagination) => {
@@ -101,6 +104,11 @@ export default function DataTable({ config, DropDownRowMenu, AddNewItem }) {
   useEffect(() => {
     dispatch(crud.list(entity));
   }, []);
+
+  useEffect(()=>{
+    setDataVal(items);
+    setPaginationVal(pagination)
+  },[listIsLoading])
 
   useEffect(() => {
     const listIds = items.map((x) => x._id);
@@ -191,8 +199,8 @@ export default function DataTable({ config, DropDownRowMenu, AddNewItem }) {
         ellipsis={true}
         // rowClassName={setRowClassName}
         size={"small"}
-        dataSource={items}
-        pagination={pagination}
+        dataSource={dataval}
+        pagination={paginationVal}
         loading={listIsLoading}
         onChange={handelDataTableLoad}
       />

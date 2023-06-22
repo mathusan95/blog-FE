@@ -98,12 +98,31 @@ export const crud = {
       });
     }
   },
+
+  createTags: (entity,jsonData) => async (dispatch) => {
+
+    console.log(entity,jsonData,"jjkkkss")
+    dispatch({
+      type: actionTypes.TAG_CREATE,
+    });
+
+    let data = await request.createTagsData(entity,jsonData);
+    if (data.success) {
+      dispatch({
+        type: actionTypes.TAG_CREATE_SUCCESS,
+        payload: true,
+      });
+      dispatch(crud.list(entity, 1, "", "", ""));
+    } else {
+      dispatch({
+        type: actionTypes.TAG_CREATE_FAILURE,
+        payload: false,
+      });
+    }
+  },
   getTags: (entity) => async (dispatch) => {
-    console.log(entity, "eneyeyeyy>>>>>");
     dispatch({
       type: actionTypes.TAGS_REQUEST_LOADING,
-      keyState: "list",
-      payload: null,
     });
     let data = await request.getTags(entity);
 
@@ -111,7 +130,7 @@ export const crud = {
     if (data.success === true) {
       dispatch({
         type: actionTypes.TAGS_GET_SUCCESS,
-        payload: data.data,
+        payload: data,
       });
     } else {
       dispatch({
@@ -234,7 +253,7 @@ export const crud = {
   },
 
   createPost: (payload) => async (dispatch) => {
-     await request.post("post", payload);
+    await request.post("post", payload);
     // if (data.success) {
     //   dispatch(crud.toggleCreateModal(false));
     // }

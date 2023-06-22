@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-import { Button, Menu } from "antd";
+import { Button, Menu, Modal } from "antd";
 import { EyeOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { useSelector, useDispatch } from "react-redux";
 import { crud } from "@/redux/crud/actions";
@@ -9,23 +9,69 @@ import { useCrudContext } from "@/context/crud";
 import uniqueId from "@/utils/uinqueId";
 import DataTable from "@/components/DataTable";
 import { useHistory } from "react-router-dom";
+import CreateForm from "@/forms/createForm";
+
+const rulesTags = [{
+  label: "tagName",
+  required: true
+}]
+
 
 function AddNewItem({ config }) {
+  const dispatch = useDispatch();
+
   const { crudContextAction } = useCrudContext();
   const history = useHistory();
-  const dispatch = useDispatch();
-  const { collapsedBox, panel } = crudContextAction;
+  const [isModalStatus, setModalStatus] = useState(false)
   const { ADD_NEW_ENTITY } = config;
+  const [rulesData, setRules] = useState([]);
+  const [formData, setFormData] = useState({});
+  const [isStart, setStart] = useState(true);
+
+
+  useEffect(() => {
+    if (config.entity === "tags") {
+      setFormData({ tagName: "" });
+    }
+
+  }, [])
   const handelClick = () => {
-    // dispatch(crud.toggleCreateModal(true));
-    history.push("/posts/create")
-    collapsedBox.close();
+    setStart(true);
+    if (config.entity === "posts") {
+      history.push("/posts/create")
+    } else {
+      const rules = config?.entity === "tags" ? rulesTags : [];
+      setModalStatus(true);
+      setRules(rules);
+      setFormData(config.entity === "tags" ? { tagName: "" } : {})
+    }
   };
 
+  const handleChangeForm = (e, label) => {
+    if (config.entity === "tags") {
+      setFormData({ tagName: e.target.value })
+    }
+  }
+  const handleSubmit = () => {
+
+    console.log("dlllffl")
+    if (config.entity === "tags") {
+      dispatch(crud.createTags("tags", formData))
+    }
+  }
+
   return (
-    <Button onClick={handelClick} type="primary">
-      {ADD_NEW_ENTITY}
-    </Button>
+    <>
+      <Button onClick={handelClick} type="primary">
+        {ADD_NEW_ENTITY}
+      </Button>
+
+      <Modal visible={isModalStatus} onOk={() => handleSubmit()} onCancel={() => setModalStatus(false)}>
+        <div style={{ marginTop: "20px" }}>
+          <CreateForm rules={rulesData} handleChangeForm={handleChangeForm} formData={formData} />
+        </div>
+      </Modal>
+    </>
   );
 }
 function DropDownRowMenu({ row }) {
@@ -75,5 +121,6 @@ export default function CrudDataTable({ config }) {
       DropDownRowMenu={DropDownRowMenu}
       AddNewItem={AddNewItem}
     />
+
   );
 }

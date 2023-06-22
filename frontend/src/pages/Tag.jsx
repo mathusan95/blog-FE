@@ -1,11 +1,16 @@
 import React from "react";
 
 import CrudModule from "@/modules/CrudModule";
-import ProductForm from "@/forms/ProductForm";
+import CreateForm from "@/forms/createForm";
 import moment from "moment";
 import { useState } from "react";
 import { crud } from "@/redux/crud/actions";
 import { useDispatch } from "react-redux";
+
+const rules=[{
+  label:"Tagname",
+  required:true
+}]
 
 function Product() {
   const entity = "tags";
@@ -69,8 +74,7 @@ function Product() {
     entityDisplayLabels,  };
   return (
     <CrudModule
-      createForm={<ProductForm />}
-      updateForm={<ProductForm isUpdateForm={true} />}
+     
       config={config}
     />
   );

@@ -35,11 +35,23 @@ export default function DataTable({ config, DropDownRowMenu, AddNewItem }) {
     },
   ];
 
-  const { result: listResult, isLoading: listIsLoading } = useSelector(
-    selectListItems
+  const { result: listResult, isLoading: listIsLoading } = useSelector(state =>
+    state.crud.list
   );
+  const [data,setData] = useState([]);
+
+  useEffect(()=>{
+
+    console.log("vbcccbbc")
+
+    setData(items)
+
+  },[listIsLoading])
+
+  const tagsCreateStatus  = useSelector(state => state.crud.tagsCreateStatus)
   const searchstrings = useSelector(state => state.crud.searchString)
-  const { pagination, items } = listResult;
+  const { items,pagination } = listResult;
+ 
 
   const handelDataTableLoad = useCallback((pagination, filterValue, sorter, searchString, column) => {
     setPage(pagination.current)
@@ -108,7 +120,7 @@ export default function DataTable({ config, DropDownRowMenu, AddNewItem }) {
       <Table
         columns={dataTableColumns}
         rowKey={(item) => item._id}
-        dataSource={items}
+        dataSource={data}
         pagination={pagination}
         loading={listIsLoading}
         onChange={(pagination, filterValue, sorter) => handelDataTableLoad(pagination, filterValue, sorter, searchstrings, "userStatus")}

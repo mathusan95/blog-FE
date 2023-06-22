@@ -113,11 +113,14 @@ const crudReducer = (state = INITIAL_STATE, action) => {
         ...state,
         tagsDataStatus: true,
         tagsData: action.payload,
+        isLoading:false
       };
     case actionTypes.TAGS_REQUEST_LOADING:
       return {
         ...state,
         tagsDataStatus: null,
+        isLoading:true
+        
       };
     case actionTypes.TAGS_GET_FAILURE:
       return {
@@ -125,6 +128,24 @@ const crudReducer = (state = INITIAL_STATE, action) => {
         tagsDataStatus: false,
         tagsData: action.payload,
       };
+      case actionTypes.TAG_CREATE:
+      return {
+        ...state,
+        tagsCreateStatus: null,
+        isLoading:null,
+      };
+      case actionTypes.TAG_CREATE_SUCCESS:
+        return {
+          ...state,
+          tagsCreateStatus: action.payload,
+          isLoading:true
+        };
+      case actionTypes.TAG_CREATE_FAILURE:
+        return {
+          ...state,
+          tagsCreateStatus: action.payload,
+          isLoading:false
+        };
     default:
       return state;
   }

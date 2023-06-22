@@ -1,7 +1,7 @@
 import React from "react";
 
 import CrudModule from "@/modules/CrudModule";
-import ProductForm from "@/forms/ProductForm";
+import ProductForm from "@/forms/createForm";
 import moment from "moment";
 import { useState } from "react";
 import { crud } from "@/redux/crud/actions";
